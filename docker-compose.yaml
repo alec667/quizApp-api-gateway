@@ -1,5 +1,20 @@
 version: '3'
 services:
+  api-gateway:
+    image: api-gateway
+    ports:
+      - "8765:8765"
+    networks:
+      - ms-network
+    restart: on-failure
+    environment:
+      server.port: 8765
+      SPRING_APPLICATION_JSON: '{"eureka":{"client":{"serviceUrl":{"defaultZone":"http://quiz-service-registry:8761/eureka"}}}}'
+      eureka.client.enabled: 'true'
+      eureka.host: quiz-service-registry
+    links:
+      - question-service
+      - quiz-service
   quiz-service-registry:
     image: quiz-service-registry
     ports:
